@@ -28,3 +28,23 @@ Les détails sur la collecte de données et l'étiquetage peuvent être consult�
 
 Pour finetuner notre modèle avec les données de allo cinéma, nous avons utiliser "camembert-base" comme modèle de base. Le choix se justifie par le fait que c'est un modèle de langue de pointe pour le français basé sur le modèle Roberta. 
 
+#### Analyse exploratoire des données
+L'analyse exploratoire sur les données révèle entre autre que la variable cible est équilibrée, on constate qu'il y'a preque autant de texte étiquetté "positif" que de texte labellisé comme "négatif"
+
+#### tokenisation et entrainement
+L'une des avantages du transfert learning en NLP, c'est que les modèles de base viennent avec leur tokenisation. Par exemple, dans l'exemple de camembert, il y'a un corpus robuste basé sur le traitement des textes en français. Ainsi, nous pouvons directement appliquer cette tokenization à notre dataset sans perdre la qualité des données.
+
+#### deployement du modèle dans huggingface
+
+### Demonstration
+
+#### chargement de l'audio
+
+#### Inférence 1 :Transcription en texte
+
+#### Inférence 2 : Analyse sentimental du texte
+
+
+### Conclusion
+
+
