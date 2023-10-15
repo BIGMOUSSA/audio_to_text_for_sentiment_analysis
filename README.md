@@ -1,50 +1,82 @@
-# audio_to_text_for_sentiment_analysis
+# Audio to Text for Sentiment Analysis
 
-L'objectif de ce travail est de construire un modèle capable, à partir d'un audio en français, de faire la transcription textuelle puis d'utiliser ce texte comme input dans un modèle d'analyse de sentiment. Ansi le modèle dira si le texte (obtenu à partir de l'audio) renvoi à un sentiment "positif" ou "négatif"
+L'objectif de ce travail est de construire un modèle capable de transcrire un audio en français en texte, puis d'utiliser ce texte comme entrée dans un modèle d'analyse de sentiment. Le modèle déterminera si le texte (obtenu à partir de l'audio) est associé à un sentiment "positif" ou "négatif".
 
-## PART1 : Modèle ASR
+## PARTIE 1 : Modèle ASR
 
-Le modèle qui servira à transcrire l'audio en texte a été télécharger sur huggingface  : https://huggingface.co/openai/whisper-large-v2. C'est un modèle qui a été entrainé pendant 680 000 heures d'audio labelisés et est capable de généraliser sans être finetuner. C'est un modèle multilinguistique et donc permet de faire l'inférence sur des enregistrements audio en français.
+Le modèle qui servira à transcrire l'audio en texte a été téléchargé depuis Hugging Face : [Whisper Large](https://huggingface.co/openai/whisper-large-v2). Il s'agit d'un modèle qui a été entraîné pendant 680 000 heures sur des données audio annotées et qui est capable de généraliser sans nécessiter un fine-tuning. Ce modèle est multilingue, ce qui signifie qu'il peut être utilisé pour effectuer des transcriptions audio en français.
 
+## PARTIE 2 : Modèle d'Analyse de Sentiment
 
-## PART 2 : modèle d'analyse de sentiment
+Dans la deuxième partie, l'objectif est de prendre le texte obtenu après la transcription de l'audio et de l'utiliser comme entrée dans un modèle d'analyse de sentiment. Pour ce faire, nous allons entraîner un modèle d'analyse de sentiment en utilisant les données disponibles sur [Kaggle](https://www.kaggle.com/datasets/djilax/allocine-french-movie-reviews) collectées par Théophile Blard. Ces données se trouvent dans le répertoire [allocine_dataset](https://github.com/TheophileBlard/french-sentiment-analysis-with-bert/tree/master/allocine_dataset).
 
-Dans la deuxième partie, l'objectif est de prendre le texte obtenu après la transcription de l'audio comme input dans
-le modèle d'analyse de sentiment. Pour ce faire, nous allons entrainer un modèle d'analyse de sentiment sur les données https://www.kaggle.com/datasets/djilax/allocine-french-movie-reviews. Ces données ont été crées et collectées par Théophile Blard [ https://github.com/TheophileBlard/french-sentiment-analysis-with-bert/tree/master/allocine_dataset]. 
+### Description des Données
 
-### Description des données
-Le jeu de données est divisé en trois fichiers, avec train.csv contenant environ 80 % des données (160 000 avis), et les fichiers de validation et de test contenant 10 % chacun. Chaque fichier comporte 3 variables :
+Les données se composent de trois fichiers, dont train.csv contient environ 80 % des données (soit 160 000 avis), tandis que les fichiers de validation et de test contiennent chacun 10 %. Chaque fichier comporte trois variables :
 
-    film-url contient un lien vers la critique originale du film.
-    review contient la critique du film (d'une longueur maximale de 2 000 caractères).
-    polarity est une variable binaire indiquant si la critique est positive ou négative.
+- film-url, contenant un lien vers la critique originale du film.
+- review, contenant la critique du film (d'une longueur maximale de 2 000 caractères).
+- polarity, une variable binaire indiquant si la critique est positive ou négative.
 
-Les détails sur la collecte de données et l'étiquetage peuvent être consultés sur la page GitHub du projet mentionné ci-dessus.
-{   1 : "positif",
-    0 : "negatif"
-    }
+Pour plus de détails sur la collecte de données et l'étiquetage, vous pouvez consulter la page GitHub du projet mentionnée ci-dessus. Les étiquettes sont les suivantes : 
+```
+{   
+    1 : "positif",
+    0 : "négatif"
+}
+```
 
-### Modèle d'entrainement
+### Modèle d'Entraînement
 
-Pour finetuner notre modèle avec les données de allo cinéma, nous avons utiliser "camembert-base" comme modèle de base. Le choix se justifie par le fait que c'est un modèle de langue de pointe pour le français basé sur le modèle Roberta. 
+Pour affiner notre modèle avec les données d'Allociné, nous avons utilisé le modèle "Camembert Base" comme modèle de base. Ce choix est justifié par le fait qu'il s'agit d'un modèle de langue de pointe pour le français basé sur l'architecture RoBERTa.
 
-#### Analyse exploratoire des données
-L'analyse exploratoire sur les données révèle entre autre que la variable cible est équilibrée, on constate qu'il y'a preque autant de texte étiquetté "positif" que de texte labellisé comme "négatif"
+#### Analyse Exploratoire des Données
 
-#### tokenisation et entrainement
-L'une des avantages du transfert learning en NLP, c'est que les modèles de base viennent avec leur tokenisation. Par exemple, dans l'exemple de camembert, il y'a un corpus robuste basé sur le traitement des textes en français. Ainsi, nous pouvons directement appliquer cette tokenization à notre dataset sans perdre la qualité des données.
+L'analyse exploratoire des données a révélé, entre autres, que la variable cible est équilibrée, avec presque autant de textes étiquetés "positif" que de textes étiquetés "négatif".
 
-#### deployement du modèle dans huggingface
+#### Tokenisation et Entraînement
 
-### Demonstration
+L'un des avantages du transfert d'apprentissage en NLP est que les modèles de base sont fournis avec leur propre mécanisme de tokenisation. Par exemple, le modèle Camembert est pré-entraîné sur un corpus de texte français robuste, ce qui nous permet d'appliquer directement cette tokenisation à notre jeu de données sans compromettre la qualité des données.
 
-#### chargement de l'audio
+#### Déploiement du Modèle sur Hugging Face
 
-#### Inférence 1 :Transcription en texte
+En raison des limites de mémoire graphique et du temps d'entraînement nécessaires, le modèle a été entraîné sur un échantillon de taille 5 000 et testé sur un échantillon de taille 2 000. Pour plus de détails sur l'entraînement du modèle, veuillez consulter le notebook "sentiment_analyse_bert_model_bi_class.ipynb".
 
-#### Inférence 2 : Analyse sentimental du texte
+### Démonstration
 
+Pour effectuer une démonstration, commencez par cloner le dépôt en utilisant la commande suivante :
+
+```
+git clone https://github.com/BIGMOUSSA/audio_to_text_for_sentiment_analysis.git
+```
+
+Pour tester le modèle, utilisez le notebook `demo.ipynb` et suivez les étapes pas à pas. Assurez-vous d'avoir un fichier audio en français à disposition.
+
+Pour la version console, vous pouvez utilisé le fichier main.py avec 
+```
+py main.py
+
+```
+
+#### Chargement de l'Audio
+
+Fournissez le lien vers le fichier audio que vous souhaitez transcrire.
+
+#### Inférence 1 : Transcription en Texte
+
+La fonction `transcribe_audio` prend un lien vers le fichier audio en tant qu'argument et applique un modèle de transcription pour produire du texte en français.
+
+#### Inférence 2 : Analyse Sentimentale du Texte
+
+La fonction `inference` combine la fonction de transcription `transcribe_audio` et la fonction d'analyse de sentiment `analyse_sentiment_text` pour produire un résultat sous forme de dictionnaire :
+
+```
+{
+    "transcription" : "J'aime le cours de deep learning",
+    "sentiment" : "Positif"
+}
+```
 
 ### Conclusion
 
-
+Ce projet vise à combiner les modèles de transcription audio et d'analyse de sentiment. Pour utiliser le modèle, il vous suffit de fournir un fichier audio en français, et le modèle vous renverra la transcription ainsi que le sentiment associé à cette transcription.
