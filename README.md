@@ -52,11 +52,7 @@ git clone https://github.com/BIGMOUSSA/audio_to_text_for_sentiment_analysis.git
 
 Pour tester le modèle, utilisez le notebook `demo.ipynb` et suivez les étapes pas à pas. Assurez-vous d'avoir un fichier audio en français à disposition.
 
-Pour la version console, vous pouvez utilisé le fichier main.py avec 
-```
-py main.py
 
-```
 
 #### Chargement de l'Audio
 
